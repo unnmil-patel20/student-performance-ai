@@ -1,0 +1,74 @@
+/* =================================
+   GLOBAL RESETS & BOX SIZING
+================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Prevents unwanted horizontal scrollbars caused by glow elements */
+  overflow-x: hidden;
+  width: 100%;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+body {
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    sans-serif;
+  
+  /* Smooth font rendering across browsers */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  background: #f5f8fc;
+  color: #172033;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+/* =================================
+   FORM & INTERACTIVE ELEMENTS
+================================= */
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: 1.15;
+}
+
+/* Fix flex child shrink bug in modern browsers */
+img,
+svg,
+video,
+canvas,
+audio,
+iframe,
+embed,
+object {
+  display: block;
+  max-width: 100%;
+}
