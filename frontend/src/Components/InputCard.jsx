@@ -53,7 +53,7 @@ function InputCard({ setPrediction }) {
 
       const data = await response.json();
 
-      setPrediction(data.predicted_marks);
+      setPrediction(data);
 
 
     } catch (error) {

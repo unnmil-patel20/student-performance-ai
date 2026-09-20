@@ -1,70 +1,111 @@
 import pandas as pd
+import numpy as np
 import joblib
+import os
 
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_absolute_error
+from sklearn.metrics import mean_absolute_error, r2_score
 
-#Student Dataset
 
-data = {
-    "study_hours": [2, 3, 4, 5, 6, 7, 8, 9, 10],
-    "attendance": [60, 65, 70, 75, 80, 82, 85, 90, 95],
-    "previous_marks": [45, 50, 55, 60, 65, 70, 75, 82, 88],
-    "assignments": [4, 5, 6, 6, 7, 8, 8, 9, 10],
-    "final_marks": [48, 52, 57, 62, 68, 72, 77, 84, 91]
-}
+# -----------------------------
+# 1. Create student dataset
+# -----------------------------
 
-df = pd.DataFrame(data)
+np.random.seed(42)
 
-print("Student Dataset:")
-print(df)
+students = 500
 
-# Inputs
-X = df[["study_hours", "attendance", "previous_marks", "assignments"]]
+study_hours = np.random.uniform(1, 10, students)
+attendance = np.random.uniform(50, 100, students)
+previous_marks = np.random.uniform(35, 95, students)
+assignments = np.random.randint(2, 11, students)
 
-# Output
-y = df["final_marks"]
 
-# Split data into training and testing
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
+# Create realistic final marks
+final_marks = (
+    0.30 * previous_marks
+    + 2.5 * study_hours
+    + 0.25 * attendance
+    + 1.5 * assignments
+    + np.random.normal(0, 4, students)
 )
 
-# Create AI model
+
+# Keep marks between 0 and 100
+final_marks = np.clip(final_marks, 0, 100)
+
+
+# -----------------------------
+# 2. Create DataFrame
+# -----------------------------
+
+data = pd.DataFrame({
+    "study_hours": study_hours,
+    "attendance": attendance,
+    "previous_marks": previous_marks,
+    "assignments": assignments,
+    "final_marks": final_marks
+})
+
+
+# -----------------------------
+# 3. Separate input and output
+# -----------------------------
+
+X = data[
+    [
+        "study_hours",
+        "attendance",
+        "previous_marks",
+        "assignments"
+    ]
+]
+
+y = data["final_marks"]
+
+
+# -----------------------------
+# 4. Split data
+# -----------------------------
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.2,
+    random_state=42
+)
+
+
+# -----------------------------
+# 5. Train model
+# -----------------------------
+
 model = LinearRegression()
 
-# Train the model
 model.fit(X_train, y_train)
 
-# Test the model
+
+# -----------------------------
+# 6. Evaluate model
+# -----------------------------
+
 predictions = model.predict(X_test)
 
-# Calculate error
-error = mean_absolute_error(y_test, predictions)
+mae = mean_absolute_error(y_test, predictions)
+r2 = r2_score(y_test, predictions)
 
-print("\nActual Marks:")
-print(y_test.values)
+print("Model Training Complete!")
+print(f"Mean Absolute Error: {mae:.2f}")
+print(f"R² Score: {r2:.2f}")
 
-print("\nPredicted Marks:")
-print(predictions)
 
-print("\nMean Absolute Error:", error)
+# -----------------------------
+# 7. Save model
+# -----------------------------
 
-# Predict for a new student
-new_student = [[6, 85, 72, 9]]
+os.makedirs("model", exist_ok=True)
 
-prediction = model.predict(new_student)
+joblib.dump(model, "model/student_model.pkl")
 
-print("\nNew Student:")
-print("Study Hours: 6")
-print("Attendance: 85%")
-print("Previous Marks: 72")
-print("Assignments: 9")
-
-print("\nPredicted Final Marks:", round(prediction[0], 2))
-
-#saved the model
-joblib.dump(model,"model/student_model.pkl")
-
-print("\n model saved successfully...")
+print("Model saved successfully!")

@@ -1,29 +1,25 @@
 
 function ResultCard({ prediction }) {
-
   const hasPrediction = prediction !== null;
 
   return (
     <div className="card result-card">
 
       <div className="result-top">
-
         <div>
           <p className="eyebrow">AI PREDICTION</p>
           <h2>Predicted Result</h2>
         </div>
 
         <div className="ai-icon">✦</div>
-
       </div>
 
 
       <div className="prediction-circle">
-
         <div className="circle-content">
 
           <span className="prediction-number">
-            {hasPrediction ? prediction : "--"}
+            {hasPrediction ? prediction.predicted_marks : "--"}
           </span>
 
           <span className="prediction-label">
@@ -31,13 +27,12 @@ function ResultCard({ prediction }) {
           </span>
 
         </div>
-
       </div>
 
 
       <h3>
         {hasPrediction
-          ? "Prediction generated!"
+          ? `${prediction.performance_level} Performance`
           : "Waiting for prediction"}
       </h3>
 
@@ -47,7 +42,10 @@ function ResultCard({ prediction }) {
         {hasPrediction ? (
           <>
             Your predicted final marks are
-            <strong> {prediction}/100 </strong>.
+            <strong>
+              {" "}
+              {prediction.predicted_marks}/100
+            </strong>.
           </>
         ) : (
           <>
@@ -60,14 +58,26 @@ function ResultCard({ prediction }) {
       </p>
 
 
+      {hasPrediction && (
+        <div className="recommendation">
+          <span>💡</span>
+
+          <div>
+            <strong>AI Recommendation</strong>
+
+            <p>
+              {prediction.recommendation}
+            </p>
+          </div>
+        </div>
+      )}
+
+
       <div className="result-footer">
 
         <div>
-
           <span className="status-dot"></span>
-
           Model ready
-
         </div>
 
         <span>Linear Regression</span>
@@ -79,4 +89,3 @@ function ResultCard({ prediction }) {
 }
 
 export default ResultCard;
-
