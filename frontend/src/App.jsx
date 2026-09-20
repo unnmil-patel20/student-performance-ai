@@ -1,39 +1,29 @@
+
+import { useState } from "react";
+
 import Navbar from "./Components/Navbar";
 import Hero from "./Components/Hero";
-import InputCard from './Components/InputCard';
-import ResultCard from './Components/ResultCard';
+import InputCard from "./Components/InputCard";
+import ResultCard from "./Components/ResultCard";
+
 import "./App.css";
+
 function App() {
+  const [prediction, setPrediction] = useState(null);
+
   return (
     <div className="app">
-      {/* Background decoration */}
-      <div className="glow glow-one"></div>
-      <div className="glow glow-two"></div>
+      <Navbar />
 
-      {/* Navigation */}
-      <Navbar/>
-
-
-      {/* Main Content */}
       <main className="main-content" id="home">
+        <Hero />
 
-        {/* Hero Section */}
-        <Hero/>
-
-        {/* Prediction Area */}
         <section className="prediction-grid">
+          <InputCard setPrediction={setPrediction} />
+          <ResultCard prediction={prediction} />
+        </section>
 
-          {/* Input Card */}
-          <InputCard/>
-
-          {/* Result Card */}
-          <ResultCard/>
-
-                  </section>
-
-        {/* Features */}
         <section className="features" id="about">
-
           <div className="feature">
             <span>01</span>
             <h3>Machine Learning</h3>
@@ -60,17 +50,13 @@ function App() {
               to your predicted marks.
             </p>
           </div>
-
         </section>
-
       </main>
 
-      {/* Footer */}
       <footer>
         <span>✦ StudentAI</span>
         <span>Powered by Machine Learning</span>
       </footer>
-
     </div>
   );
 }
